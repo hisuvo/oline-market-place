@@ -24,7 +24,26 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const marketPlace_DB = client.db("online_market_place_DB");
+    const jobCollections = marketPlace_DB.collection("jobs");
+
+    // save a jobData in server
+
+    app.post("/jobs-add", async (req, res) => {
+      const job_data = req.body;
+      const result = await jobCollections.insertOne(job_data);
+      res.send(result);
+    });
+
+    // get jobData from server
+
+    app.get("/jobs", async (req, res) => {
+      const result = await jobCollections.find().toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
