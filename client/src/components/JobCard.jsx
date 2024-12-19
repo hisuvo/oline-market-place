@@ -9,7 +9,7 @@ const JobCard = ({ job }) => {
   const {
     title,
     date,
-    // buyer,
+    buyer,
     description,
     category,
     minPrice,

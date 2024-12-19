@@ -15,7 +15,6 @@ const TabCategories = () => {
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/jobs`);
     setJobs(data);
   };
-  console.log(jobs);
 
   return (
     <Tabs>

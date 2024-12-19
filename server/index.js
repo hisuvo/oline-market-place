@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const port = process.env.PORT || 9000;
@@ -28,7 +28,6 @@ async function run() {
     const jobCollections = marketPlace_DB.collection("jobs");
 
     // save a jobData in server
-
     app.post("/jobs-add", async (req, res) => {
       const job_data = req.body;
       const result = await jobCollections.insertOne(job_data);
@@ -36,14 +35,40 @@ async function run() {
     });
 
     // get jobData from server
-
     app.get("/jobs", async (req, res) => {
       const result = await jobCollections.find().toArray();
       res.send(result);
     });
 
-    // Send a ping to confirm a successful connection
+    // get specifice userPost job from all post jobs
+    app.get("/jobs/:email", async (req, res) => {
+      // NOTE:---
+      // For specifice key get alawys use params
+      // For conditional key we use query
+      const email = req.params.email;
+      const query = { "buyer.email": email };
+      const result = await jobCollections.find(query).toArray();
+      res.send(result);
+      console.log(query);
+    });
 
+    // delete by using specifice id in server
+    app.delete("/jobs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await jobCollections.deleteOne(filter);
+      res.send(result);
+    });
+
+    // get specifice id form sever
+    app.get("/job/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await jobCollections.findOne(filter);
+      res.send(result);
+    });
+
+    // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
