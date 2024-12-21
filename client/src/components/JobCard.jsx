@@ -5,21 +5,13 @@ import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 
 const JobCard = ({ job }) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const {
-    title,
-    date,
-    buyer,
-    description,
-    category,
-    minPrice,
-    maxPrice,
-    bit_count,
-  } = job || {};
+  const [startDate, setStartDate] = useState(new Date(job.date));
+  const { _id, title, description, category, minPrice, maxPrice, bit_count } =
+    job || {};
 
   return (
     <Link
-      to={`/job/1`}
+      to={`/job/${_id}`}
       className="w-full max-w-sm px-4 py-3 bg-white rounded-md shadow-md hover:scale-[1.05] transition-all"
     >
       <div className="flex items-center justify-between">
@@ -43,7 +35,7 @@ const JobCard = ({ job }) => {
           {"..."}
         </p>
         <p className="mt-2 text-sm font-bold text-gray-600 ">
-          Range: ${maxPrice} - ${minPrice}
+          Range: ${minPrice} - ${maxPrice}
         </p>
         <p className="mt-2 text-sm font-bold text-gray-600 ">
           Total Bids: {bit_count || 0}
